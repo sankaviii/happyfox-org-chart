@@ -1,0 +1,161 @@
+/* Org chart like reference image */
+
+.orgTree {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.nodeCell {
+  text-align: center;
+  vertical-align: top;
+  padding: 0;
+}
+
+.nodeCard {
+  display: inline-block;
+  position: relative;
+  z-index: 10;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.nodeCard:hover {
+  transform: translateY(-4px);
+  z-index: 11;
+}
+
+.dropTarget {
+  transform: scale(1.08) !important;
+  z-index: 12;
+}
+
+.dropTarget::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 3px dashed #667eea;
+  border-radius: 14px;
+  background: rgba(102, 126, 234, 0.05);
+  animation: pulse-border 1.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-border {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.dragging {
+  opacity: 0.3;
+  cursor: grabbing !important;
+}
+
+/* Vertical line down from parent */
+.downLine {
+  height: 30px;
+  width: 2px;
+  background: #667eea;
+  margin: 0 auto;
+}
+
+/* Children row */
+.childCell {
+  text-align: center;
+  vertical-align: top;
+  position: relative;
+  padding: 0 30px;
+}
+
+/* T-shape connector for each child */
+.childCell::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  border-left: 2px solid #667eea;
+  height: 30px;
+  width: 0;
+  margin-left: -1px;
+}
+
+.childCell::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-top: 2px solid #667eea;
+  width: 100%;
+}
+
+/* First child */
+.childCell:first-child::after {
+  left: 50%;
+}
+
+/* Last child */
+.childCell:last-child::after {
+  width: 50%;
+  left: 0;
+}
+
+/* Only one child */
+.childCell:only-child::after {
+  display: none;
+}
+
+/* Space above each child card */
+.childCell > table {
+  margin-top: 30px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nodeCell {
+    padding: 0;
+  }
+
+  .nodeCard {
+    margin-bottom: 15px;
+  }
+
+  .downLine {
+    height: 25px;
+  }
+
+  .childCell {
+    padding: 0 15px;
+  }
+
+  .childCell::before {
+    height: 25px;
+  }
+
+  .childCell > table {
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nodeCard {
+    margin-bottom: 10px;
+  }
+
+  .downLine {
+    height: 20px;
+  }
+
+  .childCell {
+    padding: 0 10px;
+  }
+
+  .childCell::before {
+    height: 20px;
+  }
+
+  .childCell > table {
+    margin-top: 20px;
+  }
+}
