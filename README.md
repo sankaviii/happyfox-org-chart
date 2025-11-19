@@ -310,9 +310,9 @@ Given more time, I would add:
 
 ## 👤 Author
 
-[Your Name]
-- GitHub: [@yourusername]
-- Email: your.email@example.com
+Sankavi
+- GitHub: [@sankaviii]
+- Email: sankavi2110@gmail.com
 
 ## 📄 License
 
