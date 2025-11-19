@@ -54,7 +54,7 @@ An interactive employee organization chart application built with React that all
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone [<your-repo-url>](https://github.com/sankaviii/happyfox-org-chart.git)
    cd happyfox-org-chart
    ```
 
