@@ -12,11 +12,37 @@
 }
 
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
   padding-bottom: 16px;
   border-bottom: 2px solid #f0f0f0;
-  flex-shrink: 0;
-  position: relative;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+}
+
+.headerControls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.resetViewInline {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .title {
@@ -42,9 +68,9 @@
 
 /* Zoom Controls */
 .zoomControls {
-  position: absolute;
-  top: 16px;
-  right: 16px;
+  position: relative;
+  top: 0;
+  right: 0;
   display: flex;
   gap: 8px;
   background: white;
@@ -96,24 +122,20 @@
 }
 
 /* Reset View Button */
-.resetViewButton {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
+.resetViewInline {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  z-index: 1000;
 }
 
-.resetViewButton:hover {
+.resetViewInline:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
@@ -130,6 +152,39 @@
   border-radius: 10px;
   position: relative;
   scroll-behavior: smooth;
+}
+/* ensure chart wrapper is positioned for absolute child */
+.chartWrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: auto;
+}
+
+.treeOuter {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  display: block;
+}
+
+.treeContainer {
+  display: inline-block;
+  white-space: normal;
+}
+
+.controlLayer {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 2000;
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.controlLayer > * {
+  pointer-events: auto;
 }
 
 /* Add a subtle grid pattern */
@@ -254,27 +309,6 @@
   to {
     transform: rotate(5deg) scale(1.1);
   }
-}
-
-/* Instruction banner */
-.chartWrapper::after {
-  content: 'Drag any employee card to change their manager';
-  position: sticky;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: block;
-  width: fit-content;
-  padding: 10px 20px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
-  color: white;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-  pointer-events: none;
-  animation: slideDown 0.5s ease-out;
 }
 
 @keyframes slideDown {

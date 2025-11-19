@@ -33,6 +33,10 @@ export default function OrgChart() {
     return buildTree(filteredEmployees);
   }, [filteredEmployees]);
 
+  useEffect(() => {
+  setPanOffset({ x: 0, y: 0 }); // re-center
+}, [tree]);
+
   // Get all employee IDs for sortable context
   const employeeIds = useMemo(() => {
     return filteredEmployees.map(emp => emp.id);
@@ -186,87 +190,99 @@ export default function OrgChart() {
     );
   }
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Organization Chart</h2>
-        <p className={styles.subtitle}>
-          Drag and drop employees to change reporting structure
-        </p>
-      </div>
 
-      <div
-        className={styles.chartWrapper}
-        ref={chartWrapperRef}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
-        style={{ cursor: isPanning ? 'grabbing' : 'grab' }}
+return (
+  <div className={styles.container}>
+
+    <div className={styles.header}>
+  <div className={styles.headerLeft}>
+    <h2 className={styles.title}>Organization Chart</h2>
+    <p className={styles.subtitle}>
+      Drag and drop employees to change reporting structure
+    </p>
+  </div>
+
+  <div className={styles.headerControls}>
+    <button
+      onClick={handleZoomOut}
+      className={styles.zoomButton}
+      disabled={zoom <= 0.1}
+      title="Zoom Out"
+    >
+      −
+    </button>
+
+    <button
+      onClick={handleResetZoom}
+      className={styles.zoomReset}
+      title="Reset Zoom"
+    >
+      {Math.round(zoom * 100)}%
+    </button>
+
+    <button
+      onClick={handleZoomIn}
+      className={styles.zoomButton}
+      disabled={zoom >= 2}
+      title="Zoom In"
+    >
+      +
+    </button>
+
+    <button
+      onClick={handleResetView}
+      className={styles.resetViewInline}
+      title="Reset View"
+    >
+      ⟲
+    </button>
+  </div>
+</div>
+    <div
+      className={styles.chartWrapper}
+      ref={chartWrapperRef}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleMouseDown}
+      style={{ cursor: isPanning ? "grabbing" : "grab", position: "relative" }}
+    >
+      {/* DND AREA */}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragCancel={handleDragCancel}
       >
-        {/* Zoom Controls */}
-        <div className={styles.zoomControls}>
-          <button
-            onClick={handleZoomOut}
-            className={styles.zoomButton}
-            title="Zoom Out"
-            disabled={zoom <= 0.1}
-          >
-            −
-          </button>
-          <button
-            onClick={handleResetZoom}
-            className={styles.zoomReset}
-            title="Reset Zoom"
-          >
-            {Math.round(zoom * 100)}%
-          </button>
-          <button
-            onClick={handleZoomIn}
-            className={styles.zoomButton}
-            title="Zoom In"
-            disabled={zoom >= 2}
-          >
-            +
-          </button>
-        </div>
-
-        {/* Reset View Button */}
-        <button
-          onClick={handleResetView}
-          className={styles.resetViewButton}
-          title="Reset View - Center the chart"
-        >
-          ⟲ Reset View
-        </button>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-          onDragCancel={handleDragCancel}
-        >
-          <SortableContext items={employeeIds}>
+        <SortableContext items={employeeIds}>
+          <div className={styles.treeOuter}>
             <div
               className={styles.treeContainer}
               style={{
-                transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoom})`,
-                transformOrigin: 'center top',
+                position: "absolute",
+                left: "50%",
+                top: 0,
+                transform: `translateX(-50%) translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoom})`,
+                transformOrigin: "center top",
+                willChange: "transform",
               }}
             >
               {tree.map((rootEmployee) => (
                 <TreeNode key={rootEmployee.id} employee={rootEmployee} />
               ))}
             </div>
-          </SortableContext>
+          </div>
+        </SortableContext>
 
-          <DragOverlay>
-            {activeEmployee ? (
-              <div className={styles.dragOverlay}>
-                <EmployeeCard employee={activeEmployee} />
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      </div>
+        <DragOverlay>
+          {activeEmployee ? (
+            <div className={styles.dragOverlay}>
+              <EmployeeCard employee={activeEmployee} />
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
     </div>
-  );
+  </div>
+);
+
 }
